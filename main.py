@@ -12,15 +12,16 @@ count_of_posts = 100000
 
 
 @ratelim.patient(1, 1)
-def get_data_from_post():
-    # url = habr_url + str(post_id)
-    url = habr_url
+def get_data_from_post(post_id):
+    url = habr_url + str(post_id)
+
     try:
         response = requests.get(url)
         response.raise_for_status()
-        title, text, habs, rating, bookmarks, comments, user, date = get_elements(response)
-        # print(f'{title} \n {text} \n  {habs}')
-        print(date)
+        title, text, habs, tags, rating, bookmarks, comments, user, date = get_elements(response)
+        data = [title, text, habs, tags, rating, bookmarks, comments, user, date]
+
+        return data
     except requests.exceptions.HTTPError as ex:
         pass
 
@@ -41,6 +42,21 @@ def get_elements(response):
     habs = str(soup.findAll('a', class_="tm-hubs-list__link"))
     habs = re.sub(r'\<[^>]*\>', '', habs)
     habs = re.sub('\s+', ' ', habs)
+    habs = habs.split(',')
+    for i in range(len(habs)):
+        habs[i] = re.sub(r'\[|\]', '', habs[i])
+        habs[i] = habs[i].strip()
+        habs[i] = habs[i].lower()
+
+    # Теги
+    tags = str(soup.findAll('a', class_="tm-tags-list__link"))
+    tags = re.sub(r'\<[^>]*\>', '', tags)
+    tags = re.sub('\s+', ' ', tags)
+    tags = tags.split(',')
+    for i in range(len(tags)):
+        tags[i] = re.sub(r'\[|\]', '', tags[i])
+        tags[i] = tags[i].strip()
+        tags[i] = tags[i].lower()
 
     # Рейтинг
     rating = str(soup.find('span',
@@ -66,7 +82,7 @@ def get_elements(response):
     date = str(soup.find('span', class_='tm-article-snippet__datetime-published'))
     date = re.sub(r'\<[^>]*\>', '', date)
 
-    return title, text, habs, rating, bookmarks, comments, user, date
+    return title, text, habs, tags, rating, bookmarks, comments, user, date
 
 
 if __name__ == '__main__':
