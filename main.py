@@ -116,9 +116,9 @@ def get_elements(response):
 if __name__ == '__main__':
     for i in range(0, 30):
         data = get_data_from_post(i)
-        df.loc[len(df)] = data
+        df = df.append(data, ignore_index=True)
         print(i, end=' ')
-    df['rating'] = df['rating'].astype(int)
-    df['bookmarks'] = df['bookmarks'].astype(int)
-    df['comments'] = df['comments'].astype(int)
-    df.to_csv('/home/keshe4ka/Рабочий стол', encoding='utf-8')
+    # df['rating'] = df['rating'].astype(int)
+    # df['bookmarks'] = df['bookmarks'].astype(int)
+    # df['comments'] = df['comments'].astype(int)
+    df.to_csv('/home/keshe4ka/Документы/habr.csv', encoding='utf-8')
