@@ -19,7 +19,9 @@ def get_data_from_post(post_id):
         response = requests.get(url)
         response.raise_for_status()
         title, text, habs, tags, rating, bookmarks, comments, user, date = get_elements(response)
-        data = [url, title, text, habs, tags, rating, bookmarks, comments, user, date]
+        # data = [url, title, text, habs, tags, rating, bookmarks, comments, user, date]
+        data = {'url': url, 'title': title, 'text': text, 'habs': habs, 'tags': tags, 'rating': rating,
+                'bookmarks': bookmarks, 'comments': comments, 'user': user, 'date': date}
 
         return data
     except requests.exceptions.HTTPError as ex:
@@ -30,13 +32,21 @@ def get_elements(response):
     soup = BeautifulSoup(response.content, 'html.parser')
 
     # Заголовок
-    title = soup.find('meta', property='og:title')
-    title = str(title).split('="')[1].split('" ')[0]
+    try:
+        title = soup.find('meta', property='og:title')
+        title = str(title).split('="')[1].split('" ')[0]
+    except Exception as ex:
+        print(ex)
+        title = 'Null'
 
     # Текст
-    text = str(soup.find('div', id="post-content-body"))
-    text = re.sub(r'\<[^>]*\>', '', text)
-    text = re.sub('\n', ' ', text)
+    try:
+        text = str(soup.find('div', id="post-content-body"))
+        text = re.sub(r'\<[^>]*\>', '', text)
+        text = re.sub('\n', ' ', text)
+    except Exception as ex:
+        print(ex)
+        text = 'Null'
 
     # Хабы
     try:
@@ -50,7 +60,7 @@ def get_elements(response):
             habs[i] = habs[i].lower()
     except Exception as ex:
         print(ex)
-        habs = ''
+        habs = 'Null'
 
     # Теги
     try:
@@ -64,7 +74,7 @@ def get_elements(response):
             tags[i] = tags[i].lower()
     except Exception as ex:
         print(ex)
-        tags = ''
+        tags = 'Null'
 
     # Рейтинг
     try:
@@ -100,7 +110,7 @@ def get_elements(response):
         user = re.sub(r'\s', '', user)
     except Exception as ex:
         print(ex)
-        user = ''
+        user = 'Null'
 
     # Дата публикации
     try:
@@ -108,7 +118,7 @@ def get_elements(response):
         date = re.sub(r'\<[^>]*\>', '', date)
     except Exception as ex:
         print(ex)
-        date = ''
+        date = 'Null'
 
     return title, text, habs, tags, rating, bookmarks, comments, user, date
 
@@ -121,4 +131,4 @@ if __name__ == '__main__':
     # df['rating'] = df['rating'].astype(int)
     # df['bookmarks'] = df['bookmarks'].astype(int)
     # df['comments'] = df['comments'].astype(int)
-    df.to_csv('/home/keshe4ka/Документы/habr.csv', encoding='utf-8')
+    df.to_csv('/home/keshe4ka/Документы/habr.csv', line_terminator="\r\n", index=False)
