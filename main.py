@@ -11,7 +11,7 @@ df = pd.DataFrame(columns=['url', 'title', 'text', 'habs', 'tags',
                            'user', 'date'])
 
 
-@ratelim.patient(1, 1)
+# \=[-@ratelim.patient(3, 1)
 def get_data_from_post(post_id):
     url = habr_url + str(post_id)
 
@@ -19,12 +19,10 @@ def get_data_from_post(post_id):
         response = requests.get(url)
         response.raise_for_status()
         title, text, habs, tags, rating, bookmarks, comments, user, date = get_elements(response)
-        # data = [url, title, text, habs, tags, rating, bookmarks, comments, user, date]
-        data = {'url': url, 'title': title, 'text': text, 'habs': habs, 'tags': tags, 'rating': rating,
-                'bookmarks': bookmarks, 'comments': comments, 'user': user, 'date': date}
-
-        return data
-    except requests.exceptions.HTTPError as ex:
+        data_from_page = {'url': url, 'title': title, 'text': text, 'habs': habs, 'tags': tags, 'rating': rating,
+                          'bookmarks': bookmarks, 'comments': comments, 'user': user, 'date': date}
+        return data_from_page
+    except:
         pass
 
 
@@ -32,35 +30,23 @@ def get_elements(response):
     soup = BeautifulSoup(response.content, 'html.parser')
 
     # Заголовок
-    try:
-        title = soup.find('meta', property='og:title')
-        title = str(title).split('="')[1].split('" ')[0]
-    except Exception as ex:
-        print(ex)
-        title = 'Null'
+    title = soup.find('meta', property='og:title')
+    title = str(title).split('="')[1].split('" ')[0]
 
     # Текст
-    try:
-        text = str(soup.find('div', id="post-content-body"))
-        text = re.sub(r'\<[^>]*\>', '', text)
-        text = re.sub('\n', ' ', text)
-    except Exception as ex:
-        print(ex)
-        text = 'Null'
+    text = str(soup.find('div', id="post-content-body"))
+    text = re.sub(r'\<[^>]*\>', '', text)
+    text = re.sub('\n', ' ', text)
 
     # Хабы
-    try:
-        habs = str(soup.findAll('a', class_="tm-hubs-list__link"))
-        habs = re.sub(r'\<[^>]*\>', '', habs)
-        habs = re.sub('\s+', ' ', habs)
-        habs = habs.split(',')
-        for i in range(len(habs)):
-            habs[i] = re.sub(r'\[|\]', '', habs[i])
-            habs[i] = habs[i].strip()
-            habs[i] = habs[i].lower()
-    except Exception as ex:
-        print(ex)
-        habs = 'Null'
+    habs = str(soup.findAll('a', class_="tm-hubs-list__link"))
+    habs = re.sub(r'\<[^>]*\>', '', habs)
+    habs = re.sub('\s+', ' ', habs)
+    habs = habs.split(',')
+    for i in range(len(habs)):
+        habs[i] = re.sub(r'\[|\]', '', habs[i])
+        habs[i] = habs[i].strip()
+        habs[i] = habs[i].lower()
 
     # Теги
     try:
@@ -74,7 +60,7 @@ def get_elements(response):
             tags[i] = tags[i].lower()
     except Exception as ex:
         print(ex)
-        tags = 'Null'
+        tags = 'None'
 
     # Рейтинг
     try:
@@ -124,11 +110,18 @@ def get_elements(response):
 
 
 if __name__ == '__main__':
-    for i in range(0, 30):
-        data = get_data_from_post(i)
-        df = df.append(data, ignore_index=True)
-        print(i, end=' ')
-    # df['rating'] = df['rating'].astype(int)
-    # df['bookmarks'] = df['bookmarks'].astype(int)
-    # df['comments'] = df['comments'].astype(int)
-    df.to_csv('/home/keshe4ka/Документы/habr.csv', line_terminator="\r\n", index=False)
+    for i in range(20000, 80000):
+        try:
+            data = get_data_from_post(i)
+            if data is None:
+                pass
+            else:
+                data = pd.DataFrame([data])
+                print(data.head())
+                df = pd.concat([df, data], ignore_index=True)
+        except:
+            pass
+        if i % 1000 == 0:
+            print(i, end=' ')
+    print(df.head())
+    df.to_csv('/home/keshe4ka/Документы/habr20000_80000.csv', line_terminator="\r\n", index=False)
