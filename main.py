@@ -4,8 +4,9 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
+id_start = 0
+id_end = 625000
 habr_url = 'https://habr.com/ru/post/'
-count_of_posts = 100000
 df = pd.DataFrame(columns=['url', 'title', 'text', 'habs', 'tags',
                            'rating', 'bookmarks', 'comments',
                            'user', 'date'])
@@ -110,18 +111,17 @@ def get_elements(response):
 
 
 if __name__ == '__main__':
-    for i in range(20000, 80000):
+    for i in range(id_start, id_end):
         try:
             data = get_data_from_post(i)
             if data is None:
                 pass
             else:
                 data = pd.DataFrame([data])
-                print(data.head())
                 df = pd.concat([df, data], ignore_index=True)
         except:
             pass
         if i % 1000 == 0:
             print(i, end=' ')
     print(df.head())
-    df.to_csv('/home/keshe4ka/Документы/habr20000_80000.csv', line_terminator="\r\n", index=False)
+    df.to_csv(f'/home/keshe4ka/Документы/habr{id_start}_{id_end}.csv', line_terminator="\r\n", index=False)
