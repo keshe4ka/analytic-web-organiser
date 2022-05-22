@@ -8,3 +8,7 @@ psycopg2==2.9.3
 python-dotenv==0.20.0
 SQLAlchemy==1.4.36
 Werkzeug==2.1.2
+
+requests~=2.27.1
+bs4~=0.0.1
+beautifulsoup4~=4.11.1
