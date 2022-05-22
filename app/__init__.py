@@ -7,7 +7,6 @@ from flask_migrate import Migrate
 import config
 
 db = SQLAlchemy()
-migrate = Migrate(db)
 
 
 def create_app():
@@ -18,6 +17,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     # blueprint for auth routes in our app
     from .auth import auth as auth_blueprint

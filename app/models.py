@@ -18,7 +18,7 @@ class WebUser(UserMixin, db.Model):
         }
 
 
-class Group(db.Model):
+class BookmarksGroup(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     title = db.Column(db.String(), nullable=True)
     is_public = db.Column(db.Boolean(), nullable=True)
@@ -37,7 +37,7 @@ class Group(db.Model):
 class UserGroup(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('web_user.id', onupdate='CASCADE'), nullable=True)
-    group_id = db.Column(db.Integer(), db.ForeignKey('group.id', onupdate='CASCADE'), nullable=True)
+    bookmarks_group_id = db.Column(db.Integer(), db.ForeignKey('bookmarks_group.id', onupdate='CASCADE'), nullable=True)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
@@ -46,7 +46,7 @@ class UserGroup(db.Model):
         return {
             'id': self.id,
             'user_id': self.user_id,
-            'group_id': self.group_id
+            'bookmarks_group_id': self.bookmarks_group_id
         }
 
 
@@ -56,6 +56,7 @@ class Element(db.Model):
     img_src = db.Column(db.String(), nullable=True)
     tags = db.Column(db.String(), nullable=True)
     source = db.Column(db.String(), nullable=True)
+    bookmarks_group_id = db.Column(db.Integer(), db.ForeignKey('bookmarks_group.id', onupdate='CASCADE'), nullable=True)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
@@ -66,21 +67,6 @@ class Element(db.Model):
             'title': self.title,
             'img_src': self.img_src,
             'tags': self.tags,
-            'source': self.source
-        }
-
-
-class ElementGroup(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    element_id = db.Column(db.Integer(), db.ForeignKey('element.id', onupdate='CASCADE'), nullable=True)
-    group_id = db.Column(db.Integer(), db.ForeignKey('group.id', onupdate='CASCADE'), nullable=True)
-
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'element_id': self.element_id,
-            'group_id': self.group_id
+            'source': self.source,
+            'bookmarks_group_id': self.bookmarks_group_id
         }
