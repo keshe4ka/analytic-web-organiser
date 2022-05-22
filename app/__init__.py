@@ -17,7 +17,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 
     db.init_app(app)
-    migrate = Migrate(app, db)
+    migrate = Migrate(app, db, compare_type=True)
 
     # blueprint for auth routes in our app
     from .auth import auth as auth_blueprint

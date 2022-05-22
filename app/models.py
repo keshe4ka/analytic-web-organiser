@@ -1,5 +1,6 @@
 from app import db
 from flask_login import UserMixin
+import uuid
 
 
 class WebUser(UserMixin, db.Model):
@@ -21,7 +22,7 @@ class WebUser(UserMixin, db.Model):
 class BookmarksGroup(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     title = db.Column(db.String(), nullable=True)
-    is_public = db.Column(db.Boolean(), nullable=True)
+    unique_url = db.Column(db.String(), nullable=True)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
@@ -30,7 +31,7 @@ class BookmarksGroup(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'is_public': self.is_public
+            'unique_url': self.unique_url
         }
 
 
