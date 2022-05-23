@@ -1,15 +1,13 @@
-import os
-
-from flask import Blueprint, request, jsonify, render_template, send_file
+import joblib
+from flask import Blueprint, jsonify, render_template
 from flask_login import login_required, current_user
-from sqlalchemy import and_
-import psycopg2
+import sklearn
 
-from app import db
-from app.models import *
 from app.common import *
+from app.models import *
 
 main = Blueprint('main', __name__)
+model = joblib.load('model.joblib')
 
 
 @main.route(f'/', methods=['GET'])
@@ -36,7 +34,7 @@ def group_get(id):
         groups_dict.append(row.to_dict())
     for row in elements:
         elements_dict.append(row.to_dict())
-    print(elements_dict)
+    print(elements_dict, groups_dict)
     return jsonify(elements_dict), 200
 
 
@@ -46,7 +44,7 @@ def create_element(id, url):
     groups = db.session.query(BookmarksGroup).join(UserGroup, BookmarksGroup.id == UserGroup.bookmarks_group_id).filter(
         UserGroup.user_id == current_user.id)
     bookmarks_group = groups.filter(BookmarksGroup.id == id).first()
-    element_dict = get_info_from_post(url, bookmarks_group.id)
+    element_dict = get_info_from_post(url, bookmarks_group.id, model)
     element = Element(**element_dict)
     db.session.add(element)
     db.session.commit()
@@ -64,7 +62,7 @@ def share_bookmarks_group(id):
     db.session.add(bookmarks_group)
     db.session.commit()
     url = f'/shared_bookmarks_group/{unique_url}'
-    return 200
+    return jsonify(url), 200
 
 
 @main.route(f'/shared_bookmarks_group/<url>', methods=['GET'])
