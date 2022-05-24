@@ -2,6 +2,7 @@ import joblib
 from flask import Blueprint, jsonify, render_template
 from flask_login import login_required, current_user
 import sklearn
+import nltk
 
 from app.common import *
 from app.models import *

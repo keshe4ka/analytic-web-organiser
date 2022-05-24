@@ -5,6 +5,24 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import pymorphy2
 from nltk.corpus import stopwords
+import nltk
+
+categories = ['.net', 'big data', 'c#', 'c++', 'devops', 'diy или сделай сам', 'it-инфраструктура', 'it-компании',
+              'java',
+              'javascript', 'open source', 'php', 'python', 'алгоритмы', 'анализ и проектирование систем',
+              'биотехнологии',
+              'высокая производительность', 'гаджеты', 'дизайн', 'законодательство в it', 'звук', 'здоровье',
+              'игры и игровые консоли', 'интерфейсы', 'информационная безопасность', 'искусственный интеллект',
+              'исследования и прогнозы в it', 'история it', 'карьера в it-индустрии', 'компьютерное железо',
+              'конференции',
+              'космонавтика', 'математика', 'машинное обучение', 'настройка linux', 'научно-популярное',
+              'программирование',
+              'разработка веб-сайтов', 'разработка игр', 'разработка мобильных приложений', 'разработка под android',
+              'разработка под ios', 'робототехника', 'сетевые технологии', 'системное администрирование', 'смартфоны',
+              'софт',
+              'cоциальные сети и сообщества', 'тестирование it-систем', 'транспорт', 'управление персоналом',
+              'управление продуктом', 'управление проектами', 'учебный процесс в it', 'физика', 'финансы в it',
+              'энергия и элементы питания']
 
 
 def get_info_from_post(url, bookmarks_group_id, model):
@@ -12,21 +30,28 @@ def get_info_from_post(url, bookmarks_group_id, model):
     soup = BeautifulSoup(response.content, 'html.parser')
     # TODO
     # берем title
-
+    title = ''
     # берем титульную картинку
-
+    img_save = ''
+    img_src = ''
     # берем основной текст
+    text = r'iphone'
 
     # распознаем теги
-    text = 'afafasdfea'
-    text = pd.DataFrame({'text': text})
-    text['text'][0] = text_preprocess(text['text'][0])
-    predict = model.predict(text)  # TODO здесь получаем массив нулей и единиц, их нужно подставить к хабам
+    df = pd.DataFrame({'text': [text]})
+    df['text'][0] = text_preprocess(df['text'][0])
+    data = df['text']
+    predict = model.predict(data)
+    predict = predict[0].tolist()
+    tags = []
+    for i in range(0, len(predict)):
+        if predict[i] == 1:
+            tags.append(categories[i])
 
     element_dict = {
-        'title': 'title',
-        'img_src': 'title',
-        'tags': 'tags',
+        'title': title,
+        'img_src': img_src,
+        'tags': tags,
         'source': url,
         'bookmarks_group_id': bookmarks_group_id
     }
@@ -76,3 +101,15 @@ def text_preprocess(sentence):
     pre_processed_sentence = lemmatize_words(pre_processed_sentence)
     pre_processed_sentence = remove_stop_words(pre_processed_sentence)
     return pre_processed_sentence
+
+# import joblib
+# import sklearn
+# import nltk
+# #
+# # nltk.download('stopwords')
+# #
+# # for test only
+# model = joblib.load('/Users/artem_anaschenko/PycharmProjects/analytic_web_organiser/model.joblib')
+# print('uraaaa')
+# el = get_info_from_post('aaa', 1, model)
+# print(el)
