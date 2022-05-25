@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import pymorphy2
 from nltk.corpus import stopwords
+from trafilatura import fetch_url, extract
 import nltk
 
 categories = ['.net', 'big data', 'c#', 'c++', 'devops', 'diy или сделай сам', 'it-инфраструктура', 'it-компании',
@@ -28,14 +29,15 @@ categories = ['.net', 'big data', 'c#', 'c++', 'devops', 'diy или сдела�
 def get_info_from_post(url, bookmarks_group_id, model):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
-    # TODO
     # берем title
-    title = ''
-    # берем титульную картинку
-    img_save = ''
-    img_src = ''
+    title = soup.title.text
+    # берем титульную картинку?
+    # img_save = ''
+    # img_src = ''
+
     # берем основной текст
-    text = r'iphone'
+    downloaded = fetch_url(url)
+    text = extract(downloaded, include_comments=False, include_tables=False, no_fallback=True)
 
     # распознаем теги
     df = pd.DataFrame({'text': [text]})
@@ -50,7 +52,7 @@ def get_info_from_post(url, bookmarks_group_id, model):
 
     element_dict = {
         'title': title,
-        'img_src': img_src,
+        'img_src': 'img_src',
         'tags': tags,
         'source': url,
         'bookmarks_group_id': bookmarks_group_id
@@ -101,15 +103,3 @@ def text_preprocess(sentence):
     pre_processed_sentence = lemmatize_words(pre_processed_sentence)
     pre_processed_sentence = remove_stop_words(pre_processed_sentence)
     return pre_processed_sentence
-
-# import joblib
-# import sklearn
-# import nltk
-# #
-# # nltk.download('stopwords')
-# #
-# # for test only
-# model = joblib.load('/Users/artem_anaschenko/PycharmProjects/analytic_web_organiser/model.joblib')
-# print('uraaaa')
-# el = get_info_from_post('aaa', 1, model)
-# print(el)

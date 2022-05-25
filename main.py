@@ -68,7 +68,6 @@ def share_bookmarks_group(id):
 
 @main.route(f'/shared_bookmarks_group/<url>', methods=['GET'])
 def get_shared_bookmarks_group(url):
-    unique_url = uuid.uuid1()
     bookmarks_group = BookmarksGroup.query.filter(BookmarksGroup.unique_url == url).first()
     elements = Element.query.filter(Element.bookmarks_group_id == bookmarks_group.id)
     elements_dict = []
