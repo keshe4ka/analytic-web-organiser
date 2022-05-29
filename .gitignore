@@ -5,3 +5,4 @@
 /migrations/env.py
 /migrations/README
 /migrations/script.py.mako
+.DS_Store
