@@ -421,7 +421,7 @@ html{
 }
 /* Кнопка закрытия */
 .deleteElement {
-    border: 1px solid red;
+    border: 1px solid #BD293B;
     border-radius: 50%;
     font-size: 15px;
     background: #BD293B;
@@ -434,7 +434,7 @@ html{
     text-align: center;
 }
 .el_btn{
-    z-index: 12; /* Отображение на заднем плане */
+    z-index: 1; /* Отображение на заднем плане */
     margin-left: 190px;
     margin-top: -35px;
     position: absolute;
