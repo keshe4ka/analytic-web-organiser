@@ -1,0 +1,444 @@
+/* roboto-slab-regular - latin_cyrillic */
+@font-face {
+    font-family: 'Roboto Slab';
+    font-style: normal;
+    font-weight: 400;
+    src: local(''),
+    url('../fonts/roboto-slab-v23-latin_cyrillic-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/roboto-slab-v23-latin_cyrillic-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* roboto-regular - latin_cyrillic */
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: local(''),
+    url('../fonts/roboto-v30-latin_cyrillic-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/roboto-v30-latin_cyrillic-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+html{
+    box-sizing: border-box;
+}
+*, *::before, *::after{
+    box-sizing: inherit;
+}
+#body{}::-webkit-scrollbar{width: 3px;height: 3px;}
+::-webkit-scrollbar-track-piece{background-color: #ffffff;}
+::-webkit-scrollbar-thumb:vertical{height: 3px;background-color: #C4C4C4;}
+::-webkit-scrollbar-thumb:horizontal{width: 3px;background-color: #C4C4C4;}
+.welcome-text{
+    text-align: center;
+    font-family: 'Roboto Slab';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 63px;
+    color: #000000;
+}
+.content{
+    margin-top: 71px;
+}
+.wrapper{
+    max-width: 80%;
+    margin: 0 auto;
+}
+.icon{
+    display: block;
+    margin: 0 auto;
+    margin-top: 60px;
+    margin-bottom: 82px;
+    width: 20%;
+    height: 20%;
+}
+.flat-button{
+    background: #2976BD;
+    border: 0;
+    border-radius: 20px;
+    width: 386px;
+    height: 87px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 82px;
+    margin-bottom: 60px;
+    cursor: pointer;
+}
+.flat-button__content{
+    text-align: center;
+    font-family: 'Roboto Slab';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 63px;
+    color: #FFFFFF;
+}
+
+.head{
+    height: 80px;
+    width: 100%;
+    background: #343434;
+}
+.name-text{
+    margin-top: -75px;
+    margin-left: 85px;
+    position: absolute;
+    text-align: center;
+    font-family: 'Roboto Slab';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 63px;
+    color: #FFFFFF;
+    z-index: 10; /* Отображение на заднем плане */
+}
+.title{
+    display: inline-block;
+}
+.logo{
+    display: inline-block;
+    margin: 0 auto;
+    margin-top: 12px;
+    margin-left: 12px;
+    margin-bottom: 0px;
+    width: 12%;
+    height: 12%;
+}
+.logout{
+    margin-left: 880px;
+    text-align: right;
+    font-family: 'Roboto Slab';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 63px;
+    color: #FFFFFF;
+}
+.logout:hover{
+    color: #F0A12B;
+}
+/* Список групп */
+.menu{
+    width: 330px;
+    height: 740px;
+    max-height: 740px; /*Высота блока после которой начнется прокрутка*/
+    display: list-item;
+    overflow-x: hidden; /*непосредственно прокрутка*/
+    margin: 0 -3px;
+    padding-top: 1px;
+    align: center;
+    margin-left: -25px;
+    margin-top: -48px;
+    border-right: solid 1px #C4C4C4;
+}
+/* Кнопка добавления группы */
+.add_group{
+    margin-top: 10px;
+    margin-left: 10px;
+    position: relative;
+    width: 300.00px;
+    height: 100px;
+    border: 1px solid #C4C4C4;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+    background: #FFFFFF;
+    border-radius: 15px;
+    color: #C4C4C4;
+    text-align: center;
+    padding-top: 1px;
+}
+/* Кнопка группы */
+.group_button{
+    margin-top: 10px;
+    margin-left: 10px;
+    position: relative;
+    width: 300.00px;
+    height: 100px;
+    border: 1px solid #C4C4C4;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+    background: #FFFFFF;
+    border-radius: 15px;
+}
+/* Кнопка текущей группы */
+.group_button_selected{
+    background: rgba(114, 205, 43, 0.2);
+    margin-top: 10px;
+    margin-left: 10px;
+    position: relative;
+    width: 300.00px;
+    height: 100px;
+    border: 1px solid #C4C4C4;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+    border-radius: 15px;
+}
+/* Всплывающая форма-скрыта по умолчанию */
+.form-popup {
+    display: none; /* Модальное окно скрыто по умолчанию */
+    position: fixed; /* Фикс. Позиция на главной странице */
+    z-index: 1; /* Отображение на заднем плане */
+    left: 0;
+    top: 0;
+    width: 100%; /* 100% по ширине */
+    height: 100%; /* 100% по высоте */
+    overflow: auto; /* Включить прокрутку, если необходимо */
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+.form-popup-content{
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% от верха и центрировано */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 400px; /* Может быть больше и меньше, зависит от размеров экрана */
+    height: 200px;
+    box-shadow: 5px 10px 5px #666; /*Добавить тень */
+    border-radius: 15px;
+    align: center;
+}
+/* Кнопка закрытия */
+.closeModal {
+    border: 0px;
+    border-radius: 20px;
+    font-size: 20px;
+    background: #FFFFFF;
+    position: absolute;
+    margin-left:350px;
+    margin-top:-20px;
+    margin-right:0px;
+    display: fixed;
+}
+/* Название поп-апа */
+.form-title{
+    font-family: 'Roboto Slab';
+    font-style: normal;
+    font-size: 20px;
+    text-align: center;
+}
+/* Инпут поп-апа */
+.input-pop{
+    align: center;
+    width: 360px;
+    margin-left: 0px;
+    margin-top: 20px;
+    font-size: 18px;
+    border: 0;
+    border-bottom: 2px solid #C4C4C4;
+}
+/* Кнопка поп-апа */
+.button-pop{
+    align: center;
+    width: 120px;
+    height: 30px;
+    background: #29BD6D;
+    color: #FFFFFF;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 0px;
+    margin-left: 120px;
+    margin-top: 30px;
+}
+/* Блок имени группы */
+.group-name{
+    position: absolute;
+    display: fixed;
+    align: center;
+    width: 1000px;
+    height: 60px;
+    margin-top: -730px;
+    margin-left: 350px;
+    text-align: center;
+    font-size: 36px;
+}
+/* Блок элементов */
+.elements{
+    position: absolute;
+    align: center;
+    width: 1055px;
+    height: 600px;
+    margin-top: -670px;
+    margin-left: 330px;
+    text-align: justify;
+    font-size: 36px;
+    display: inline;
+}
+/* Блок элемента */
+.element{
+    float: left;
+    position: relative;
+    border: 1px solid #C4C4C4;
+    display: inline;
+    align: center;
+    width: 200px;
+    height: 250px;
+    text-align: center;
+    font-size: 36px;
+    margin: 5px;
+    border-radius: 5px;
+}
+/* Блок кнопок */
+.buttons{
+    position: absolute;
+    display: fixed;
+    align: center;
+    width: 1050px;
+    height: 50px;
+    margin-top: -60px;
+    margin-left: 330px;
+    text-align: center;
+    font-size: 36px;
+}
+/* Кнопка удалить группу */
+.button-delete-group{
+    align: left;
+    width: 170px;
+    height: 30px;
+    background: #BD293B;
+    color: #FFFFFF;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 0px;
+
+}
+/* Кнопка добавления закладки */
+.button-add-element{
+    align: right;
+    width: 200px;
+    height: 30px;
+    background: #29BD6D;
+    color: #FFFFFF;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 0px;
+    margin-left: 528px;
+}
+/* Кнопка поделиться */
+.button-share{
+    align: right;
+    width: 120px;
+    height: 30px;
+    background: #2976BD;
+    color: #FFFFFF;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 0px;
+    margin-left: 30px;
+}
+.el_image{
+    float: left;
+    position: relative;
+    border: 1px solid #C4C4C4;
+    display: inline;
+    align: center;
+    width: 192px;
+    height: 100px;
+    text-align: center;
+    font-size: 15px;
+    margin: 3px;
+}
+.el_img{
+    width: 192px;
+    height: 100px;
+}
+.el_title{
+    float: left;
+    position: relative;
+    display: inline;
+    align: center;
+    width: 200px;
+    height: 70px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 1px;
+}
+.el_tags{
+    float: left;
+    position: relative;
+    display: inline;
+    align: center;
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    font-size: 10px;
+}
+.el_a_div{
+    float: left;
+    position: relative;
+    display: inline;
+    align: center;
+    width: 200px;
+    height: 15px;
+    text-align: center;
+    font-size: 15px;
+    margin-top: 0px;
+}
+.el_a{
+    font-size: 10px;
+    align: center;
+}
+/* Кнопка поп-апа удаления */
+.button-pop3{
+    align: center;
+    width: 120px;
+    height: 30px;
+    background: #BD293B;
+    color: #FFFFFF;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 0px;
+    margin-left: 120px;
+    margin-top: 30px;
+}
+.form-popup-content3{
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% от верха и центрировано */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 400px; /* Может быть больше и меньше, зависит от размеров экрана */
+    height: 160px;
+    box-shadow: 5px 10px 5px #666; /*Добавить тень */
+    border-radius: 15px;
+    align: center;
+}
+.unique-url{
+    margin-top: 20px;
+    width: 350px;
+    align: center;
+    text-align: center;
+}
+.unique-url-a{
+    text-align: center;
+    font-size: 13px;
+}
+/* Блок элементов */
+.elements-shared{
+    position: absolute;
+    align: center;
+    width: 1055px;
+    height: 600px;
+    margin-top: 0px;
+    margin-left: 150px;
+    text-align: justify;
+    font-size: 36px;
+    display: inline;
+}
+/* Кнопка закрытия */
+.deleteElement {
+    border: 1px solid red;
+    border-radius: 50%;
+    font-size: 15px;
+    background: #BD293B;
+    color: #FFFFFF;
+    padding: 0px;
+    padding-top: -10px;
+    display: fixed;
+    height: 15px;
+    width: 15px;
+    text-align: center;
+}
+.el_btn{
+    z-index: 12; /* Отображение на заднем плане */
+    margin-left: 190px;
+    margin-top: -35px;
+    position: absolute;
+}
+.x-btn{
+    margin-top: -4px;
+}

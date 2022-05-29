@@ -4,8 +4,14 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import pymorphy2
+from flask import url_for
 from nltk.corpus import stopwords
 from trafilatura import fetch_url, extract
+from trafilatura.settings import use_config
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from time import sleep
+import random
 import nltk
 
 categories = ['.net', 'big data', 'c#', 'c++', 'devops', 'diy или сделай сам', 'it-инфраструктура', 'it-компании',
@@ -29,15 +35,23 @@ categories = ['.net', 'big data', 'c#', 'c++', 'devops', 'diy или сдела�
 def get_info_from_post(url, bookmarks_group_id, model):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
+
     # берем title
     title = soup.title.text
-    # берем титульную картинку?
-    # img_save = ''
-    # img_src = ''
+
+    # делаем снимок сайта
+    driver = webdriver.Chrome('/Users/artem_anaschenko/Downloads/chromedriver')
+    driver.get(url)
+    sleep(1)
+    img_src = f'screenshot{random.randint(0, 1000)}_{bookmarks_group_id}.png'
+    driver.get_screenshot_as_file(
+        f'/Users/artem_anaschenko/PycharmProjects/analytic_web_organiser/app/static/img/png/{img_src}')
+    driver.quit()
 
     # берем основной текст
     downloaded = fetch_url(url)
-    text = extract(downloaded, include_comments=False, include_tables=False, no_fallback=True)
+    new_config = use_config("/Users/artem_anaschenko/PycharmProjects/analytic_web_organiser/app/settings.cfg")
+    text = extract(downloaded, include_comments=False, include_tables=False, no_fallback=True, config=new_config)
 
     # распознаем теги
     df = pd.DataFrame({'text': [text]})
@@ -49,11 +63,16 @@ def get_info_from_post(url, bookmarks_group_id, model):
     for i in range(0, len(predict)):
         if predict[i] == 1:
             tags.append(categories[i])
+    tags_string = ''
+    for tag in tags:
+        tags_string = tags_string + '#' + str(tag) + ' '
 
+    # готовим url
+    img_src = url_for('static', filename=f'img/png/{img_src}')
     element_dict = {
         'title': title,
-        'img_src': 'img_src',
-        'tags': tags,
+        'img_src': img_src,
+        'tags': tags_string,
         'source': url,
         'bookmarks_group_id': bookmarks_group_id
     }

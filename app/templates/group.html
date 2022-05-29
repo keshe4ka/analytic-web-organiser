@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="menu">
+    {% for group in groups %}
+    {% if group.id == id %}
+    <form method="GET" action="/bookmarks_group/{{group.id}}">
+        <button class="group_button_selected">{{group.title}}</button>
+    </form>
+    {% endif %}
+    {% if group.id != id %}
+    <form method="GET" action="/bookmarks_group/{{group.id}}">
+        <button class="group_button">{{group.title}}</button>
+    </form>
+    {% endif %}
+    {% endfor %}
+    <button class="add_group" onclick="openForm()">новая группа</button>
+</div>
+<div class="form-popup" id="addGroupForm">
+    <div class="form-popup-content">
+        <button class="closeModal" onclick="closeForm()">×</button>
+        <h1 class="form-title">Добавить группу</h1>
+        <br>
+        <form method="POST" action="/create_group" class="form-container">
+            <input class="input-pop" type="text" placeholder="Название группы" name="title" required>
+            <button type="submit" class="button-pop">Добавить</button>
+        </form>
+    </div>
+</div>
+<div class="group-name">
+    <h1>{{bookmarks_group.title}}</h1>
+</div>
+<div class="elements">
+    {% for element in elements %}
+    <div class="element">
+        <div class="el_btn">
+            <form method="POST" action="/bookmarks_group/{{id}}/delete_element/{{element.id}}" class="form-container">
+                <button class="deleteElement"><p class="x-btn">×</p></button>
+            </form>
+        </div>
+        <div class="el_image"><img class="el_img" src="{{element.img_src}}" alt=""></div>
+        <div class="el_title">{{element.title}}</div>
+        <div class="el_tags">{{element.tags}}</div>
+        <div class="el_a_div"><a href="{{element.source}}" class="el_a">Ссылка на источник</a></div>
+    </div>
+    {% endfor %}
+</div>
+<div class="buttons">
+    <button type="submit" class="button-delete-group" onclick="openForm3()">Удалить группу</button>
+    <button type="submit" class="button-add-element" onclick="openForm2()">Добавить закладку</button>
+    <button type="submit" class="button-share" onclick="openForm4()">Поделиться</button>
+
+</div>
+<div class="form-popup" id="addElement">
+    <div class="form-popup-content">
+        <button class="closeModal" onclick="closeForm2()">×</button>
+        <h1 class="form-title">Добавить закладку</h1>
+        <br>
+        <form method="POST" action="/bookmarks_group/{{id}}/create" class="form-container">
+            <input class="input-pop" type="text" placeholder="Вставьте ссылку" name="url" required>
+            <button type="submit" class="button-pop">Добавить</button>
+        </form>
+    </div>
+</div>
+<div class="form-popup" id="deleteGroup">
+    <div class="form-popup-content3">
+        <button class="closeModal" onclick="closeForm3()">×</button>
+        <h1 class="form-title">Удалить группу?</h1>
+        <form method="POST" action="/delete_group/{{id}}" class="form-container">
+            <br>
+            <button type="submit" class="button-pop3">Удалить</button>
+        </form>
+    </div>
+</div>
+<div class="form-popup" id="shareGroup">
+    <div class="form-popup-content3">
+        <button class="closeModal" onclick="closeForm4()">×</button>
+        <h1 class="form-title">Общедоступная ссылка</h1>
+        <div class="unique-url"><p class="unique-url-a">
+            http://127.0.0.1:5000/shared_bookmarks_group/{{bookmarks_group.unique_url}}</p></div>
+    </div>
+</div>
+{% endblock %}
