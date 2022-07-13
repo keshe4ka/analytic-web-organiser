@@ -10,7 +10,6 @@ from app.models import *
 
 main = Blueprint('main', __name__)
 
-
 model = joblib.load('model.joblib')
 
 
@@ -46,45 +45,6 @@ def group_get(id):
                            elements=elements_dict)
 
 
-@main.route(f'/bookmarks_group/<int:id>/create', methods=['POST'])
-@login_required
-def create_element(id):
-    url = request.form['url']
-    groups = db.session.query(BookmarksGroup).join(UserGroup, BookmarksGroup.id == UserGroup.bookmarks_group_id).filter(
-        UserGroup.user_id == current_user.id)
-    bookmarks_group = groups.filter(BookmarksGroup.id == id).first()
-    element_dict = get_info_from_post(url, bookmarks_group.id, model)
-    element = Element(**element_dict)
-    db.session.add(element)
-    db.session.commit()
-    return redirect(url_for('main.group_get', id=id))
-
-
-# @main.route(f'/bookmarks_group/<int:id>/share', methods=['GET'])
-# @login_required
-# def share_bookmarks_group(id):
-#     unique_url = uuid.uuid1()
-#     groups = db.session.query(BookmarksGroup).join(UserGroup, BookmarksGroup.id == UserGroup.bookmarks_group_id).filter(
-#         UserGroup.user_id == current_user.id)
-#     bookmarks_group = groups.filter(BookmarksGroup.id == id).first()
-#     bookmarks_group.unique_url = unique_url
-#     db.session.add(bookmarks_group)
-#     db.session.commit()
-#     url = f'/shared_bookmarks_group/{unique_url}'
-#     return jsonify(url), 200
-
-
-@main.route(f'/shared_bookmarks_group/<url>', methods=['GET'])
-def get_shared_bookmarks_group(url):
-    bookmarks_group = BookmarksGroup.query.filter(BookmarksGroup.unique_url == str(url)).first()
-    id = bookmarks_group.id
-    elements = Element.query.filter(Element.bookmarks_group_id == id)
-    elements_dict = []
-    for row in elements:
-        elements_dict.append(row.to_dict())
-    return render_template('shared.html', bookmarks_group=bookmarks_group, elements=elements_dict)
-
-
 @main.route(f'/create_group', methods=['POST'])
 @login_required
 def create_group():
@@ -111,12 +71,37 @@ def delete_group(id):
     return redirect(url_for('main.start_page'))
 
 
+@main.route(f'/bookmarks_group/<int:id>/create', methods=['POST'])
+@login_required
+def create_element(id):
+    url = request.form['url']
+    groups = db.session.query(BookmarksGroup).join(UserGroup, BookmarksGroup.id == UserGroup.bookmarks_group_id).filter(
+        UserGroup.user_id == current_user.id)
+    bookmarks_group = groups.filter(BookmarksGroup.id == id).first()
+    element_dict = get_info_from_post(url, bookmarks_group.id, model)
+    element = Element(**element_dict)
+    db.session.add(element)
+    db.session.commit()
+    return redirect(url_for('main.group_get', id=id))
+
+
 @main.route(f'/bookmarks_group/<int:id>/delete_element/<int:el_id>', methods=['POST'])
 @login_required
 def delete_element(id, el_id):
     Element.query.filter(Element.id == el_id).delete()
     db.session.commit()
     return redirect(url_for('main.group_get', id=id))
+
+
+@main.route(f'/shared_bookmarks_group/<url>', methods=['GET'])
+def get_shared_bookmarks_group(url):
+    bookmarks_group = BookmarksGroup.query.filter(BookmarksGroup.unique_url == str(url)).first()
+    id = bookmarks_group.id
+    elements = Element.query.filter(Element.bookmarks_group_id == id)
+    elements_dict = []
+    for row in elements:
+        elements_dict.append(row.to_dict())
+    return render_template('shared.html', bookmarks_group=bookmarks_group, elements=elements_dict)
 
 
 def register_blueprint(main_blueprint):

@@ -257,6 +257,10 @@ html{
     text-align: justify;
     font-size: 36px;
     display: inline;
+    max-height: 600px; /*Высота блока после которой начнется прокрутка*/
+    display: list-item;
+    overflow-x: hidden; /*непосредственно прокрутка*/
+    border-right: solid 1px #C4C4C4;
 }
 /* Блок элемента */
 .element{
@@ -441,4 +445,18 @@ html{
 }
 .x-btn{
     margin-top: -4px;
+}
+/* Список групп */
+.menu{
+    width: 330px;
+    height: 740px;
+    max-height: 740px; /*Высота блока после которой начнется прокрутка*/
+    display: list-item;
+    overflow-x: hidden; /*непосредственно прокрутка*/
+    margin: 0 -3px;
+    padding-top: 1px;
+    align: center;
+    margin-left: -25px;
+    margin-top: -48px;
+    border-right: solid 1px #C4C4C4;
 }
