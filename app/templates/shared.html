@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="group-name">
+    <h1>{{bookmarks_group.title}}</h1>
+</div>
+<div class="elements-shared">
+    {% for element in elements %}
+    <div class="element">
+        <div class="el_image"><img class="el_img" src="{{element.img_src}}"
+                                   alt="">
+        </div>
+        <div class="el_title">{{element.title}}</div>
+        <div class="el_tags">{{element.tags}}</div>
+        <div class="el_a_div"><a href="{{element.source}}" class="el_a">Ссылка на источник</a></div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

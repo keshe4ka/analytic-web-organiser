@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Web Organiser</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+
+</head>
+<body>
+<div class="content">
+    <div class="wrapper">
+        <div class="welcome-text">Знакомьтесь, перед вами аналитический Web-органайзер</div>
+        <img class="icon" src="{{ url_for('static', filename= 'img/svg/icon.svg') }}" alt="">
+        <div class="welcome-text">Хранение закладок еще никогда не было таким удобным</div>
+        {% if not current_user.is_authenticated %}
+        <form method="GET" action="/login">
+            <button class="flat-button">
+                <span class="flat-button__content">Начать работу</span>
+            </button>
+        </form>
+        {% endif %}
+        {% if current_user.is_authenticated %}
+        <form method="GET" action="/bookmarks_group">
+            <button class="flat-button">
+                <span class="flat-button__content">Продолжить</span>
+            </button>
+        </form>
+        {% endif %}
+
+    </div>
+</div>
+</body>
+</html>
